@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +38,7 @@ public class UserController {
 		return new ResponseEntity<String>("User created, userId: " + user.getUserId(), HttpStatus.ACCEPTED);
 	}
 
-	@PostMapping("/user_details/{userId}")
+	@GetMapping("/user_details/{userId}")
 	public @ResponseBody ResponseEntity<Object> getUserDetailsByUserId(@PathVariable String userId) {
 		Optional<User> user = null;
 		try {

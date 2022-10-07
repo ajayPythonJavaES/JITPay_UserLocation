@@ -1,6 +1,6 @@
 package com.jitpay.user.location.model;
 
-public class UserLocationInputFromMobileApp {
+public class UserLocationFromMobileAppRequest {
 
 	private String userId;
 	private String createdOn;

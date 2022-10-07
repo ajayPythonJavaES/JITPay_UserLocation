@@ -1,75 +1,81 @@
 package com.jitpay.user.location.model;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name="USER_LOCATION")
+@Table(name = "USER_LOCATION")
 public class UserLocation {
 
 	@Id
-	private String userLocationId;
+	@JsonIgnore
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int userLocationId;
 
-	@OneToOne(cascade=CascadeType.ALL, targetEntity=User.class)
-	@JoinColumn(name="userId")
-	private Set<User> userId = new LinkedHashSet<>();
-
-	@OneToMany(cascade=CascadeType.ALL, targetEntity=Location.class)
-	@JoinColumn(name="locationId")
-	private Set<Location> locationId = new LinkedHashSet<>();
-	
-	private String errorMessage;
-	
 	@Column
-	private String createdOn;
+	private String userId;
 
-	public String getUserLocationId() {
+	@Column
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime createdOn;
+
+	@OneToOne(targetEntity = Location.class, cascade = CascadeType.ALL)
+	private Location location;
+
+	public int getUserLocationId() {
 		return userLocationId;
 	}
 
-	public void setUserLocationId(String userLocationId) {
+	public void setUserLocationId(int userLocationId) {
 		this.userLocationId = userLocationId;
 	}
 
-	public Set<User> getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Set<User> userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public Set<Location> getLocationId() {
-		return locationId;
-	}
-
-	public void setLocationId(Set<Location> locationId) {
-		this.locationId = locationId;
-	}
-
-	public String getCreatedOn() {
+	public LocalDateTime getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(String createdOn) {
+	public void setCreatedOn(LocalDateTime createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public String getErrorMessage() {
-		return errorMessage;
+	public Location getLocation() {
+		return location;
 	}
 
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof UserLocation))
+			return false;
+		UserLocation userLocation = (UserLocation) o;
+		return userLocation.getUserId() == this.getUserId() && userLocation.getCreatedOn() == this.getCreatedOn()
+				&& userLocation.getLocation().getLatitude() == this.getLocation().getLatitude()
+				&& userLocation.getLocation().getLongitude() == this.getLocation().getLongitude();
+	}
+	
 }
