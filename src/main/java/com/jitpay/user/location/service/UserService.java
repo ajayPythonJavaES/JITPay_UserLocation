@@ -2,7 +2,7 @@ package com.jitpay.user.location.service;
 
 import java.util.Optional;
 
-import com.jitpay.user.location.model.User;
+import com.jitpay.user.location.vo.User;
 
 public interface UserService {
 

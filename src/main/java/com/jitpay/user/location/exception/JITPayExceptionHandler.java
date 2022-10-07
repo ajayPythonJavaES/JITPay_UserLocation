@@ -1,5 +1,7 @@
 package com.jitpay.user.location.exception;
 
+import java.time.format.DateTimeParseException;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.core.Ordered;
@@ -19,6 +21,14 @@ public class JITPayExceptionHandler extends ResponseEntityExceptionHandler{
 		ApiException apiException = new ApiException(HttpStatus.NOT_FOUND);
 		apiException.setDebugMessage(ex.getLocalizedMessage());
 		apiException.setMessage(ex.getMessage());
+		return buildResponseEntity(apiException);
+	}
+	
+	@ExceptionHandler(DateTimeParseException.class)
+	public ResponseEntity<Object> handleParseException(DateTimeParseException ex) {
+		ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST);
+		apiException.setDebugMessage(ex.getLocalizedMessage());
+		apiException.setMessage(ex.getMessage() + ". Please check the date format specified in the request");
 		return buildResponseEntity(apiException);
 	}
 	

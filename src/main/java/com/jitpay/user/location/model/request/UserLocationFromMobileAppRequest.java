@@ -1,4 +1,6 @@
-package com.jitpay.user.location.model;
+package com.jitpay.user.location.model.request;
+
+import com.jitpay.user.location.vo.Location;
 
 public class UserLocationFromMobileAppRequest {
 

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jitpay.user.location.exception.JITPayExceptionHandler;
-import com.jitpay.user.location.model.User;
 import com.jitpay.user.location.service.UserService;
+import com.jitpay.user.location.vo.User;
 
 @RestController
 public class UserController {
