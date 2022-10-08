@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jitpay.user.location.entity.User;
 import com.jitpay.user.location.repository.UserRepository;
-import com.jitpay.user.location.vo.User;
 
 @Service
 public class UserServiceImpl implements UserService {

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jitpay.user.location.entity.User;
 import com.jitpay.user.location.exception.JITPayExceptionHandler;
 import com.jitpay.user.location.service.UserService;
-import com.jitpay.user.location.vo.User;
 
 @RestController
 public class UserController {
@@ -26,23 +26,18 @@ public class UserController {
 
 	@PostMapping("/save_update_user")
 	public @ResponseBody ResponseEntity<String> saveOrUpdateUser(@RequestBody User user) {
-
-		if (user != null) {
-			try {
-				userService.saveOrUpdateUser(user);
-			} catch (Exception e) {
-				return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
-			}
+		try {
+			userService.saveOrUpdateUser(user);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
 		}
-
 		return new ResponseEntity<String>("User created, userId: " + user.getUserId(), HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/user_details/{userId}")
 	public @ResponseBody ResponseEntity<Object> getUserDetailsByUserId(@PathVariable String userId) {
-		Optional<User> user = null;
+		Optional<User> user = Optional.ofNullable(getUser(userId));
 		try {
-			user = userService.getUserById(userId);
 			if (user.isEmpty())
 				throw new EntityNotFoundException("User does not exist with user id: " + userId);
 		} catch (EntityNotFoundException e) {
@@ -52,4 +47,10 @@ public class UserController {
 		return new ResponseEntity<>(user.get(), HttpStatus.OK);
 	}
 
+	private User getUser(String userId) {
+		if (userService.getUserById(userId).isPresent()) {
+			return userService.getUserById(userId).get();
+		}
+		return null;
+	}
 }

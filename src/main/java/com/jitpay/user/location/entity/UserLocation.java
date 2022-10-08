@@ -1,4 +1,4 @@
-package com.jitpay.user.location.model.request;
+package com.jitpay.user.location.entity;
 
 import java.time.LocalDateTime;
 
@@ -14,11 +14,10 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jitpay.user.location.vo.Location;
 
 @Entity
 @Table(name = "USER_LOCATION")
-public class UserLocationRequest {
+public class UserLocation {
 
 	@Id
 	@JsonIgnore
@@ -72,9 +71,9 @@ public class UserLocationRequest {
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
-		if (!(o instanceof UserLocationRequest))
+		if (!(o instanceof UserLocation))
 			return false;
-		UserLocationRequest userLocation = (UserLocationRequest) o;
+		UserLocation userLocation = (UserLocation) o;
 		return userLocation.getUserId() == this.getUserId() && userLocation.getCreatedOn() == this.getCreatedOn()
 				&& userLocation.getLocation().getLatitude() == this.getLocation().getLatitude()
 				&& userLocation.getLocation().getLongitude() == this.getLocation().getLongitude();

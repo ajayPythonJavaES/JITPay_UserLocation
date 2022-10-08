@@ -1,6 +1,6 @@
 package com.jitpay.user.location.model.response;
 
-import com.jitpay.user.location.vo.Location;
+import com.jitpay.user.location.entity.Location;
 
 public class LocationsResponse {
 

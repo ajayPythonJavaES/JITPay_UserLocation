@@ -3,7 +3,7 @@ package com.jitpay.user.location.controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jitpay.user.location.entity.User;
+import com.jitpay.user.location.entity.UserLocation;
 import com.jitpay.user.location.exception.JITPayExceptionHandler;
-import com.jitpay.user.location.model.request.UserLocationRequest;
-import com.jitpay.user.location.model.response.LocationsResponse;
-import com.jitpay.user.location.model.response.UserLocationResponse;
 import com.jitpay.user.location.service.UserLocationService;
 import com.jitpay.user.location.service.UserService;
 import com.jitpay.user.location.util.JITPayUserAPIUtil;
@@ -35,27 +35,24 @@ public class UserLocationController {
 	private UserService userService;
 
 	@PostMapping("/save_user_location")
-	public @ResponseBody ResponseEntity<Object> saveUserLocation(@RequestBody UserLocationRequest userLocation) {
-		if (userLocation != null) {
+	public @ResponseBody ResponseEntity<Object> saveUserLocation(@RequestBody UserLocation userLocation) {
+		if (Objects.nonNull(userLocation)) {
 			try {
-				if (userService.getUserById(userLocation.getUserId()).isEmpty())
-					throw new EntityNotFoundException("User does not exist with user id: " + userLocation.getUserId());
-				else {
-					userLocationService.saveUserLocation(userLocation);
-				}
+				if (!userLocationService.saveUserLocation(userLocation))
+					throw new EntityNotFoundException(
+							"Problem occured in saving the user location, user not found with id: "
+									+ userLocation.getUserId());
 			} catch (EntityNotFoundException exc) {
 				return new JITPayExceptionHandler().handleEntityNotFound(exc);
 			}
-
 		}
-
 		return new ResponseEntity<Object>(new String("Location updated for user: " + userLocation.getUserId()),
 				HttpStatus.OK);
 	}
 
-	@GetMapping("/get_user_locations_for_date_range/{userId}/{fromDateTime}/{toDateTime}")
+	@GetMapping("/get_user_locations_for_date_range/{userId}")
 	public @ResponseBody ResponseEntity<Object> getUserLocationsWithinDateRange(@PathVariable String userId,
-			@PathVariable String fromDateTime, @PathVariable String toDateTime) {
+			@RequestParam(name = "from") String fromDateTime, @RequestParam(name = "to") String toDateTime) {
 
 		LocalDateTime fromDateT, toDateT;
 		try {
@@ -68,21 +65,28 @@ public class UserLocationController {
 		} catch (EntityNotFoundException e) {
 			return new JITPayExceptionHandler().handleEntityNotFound(e);
 		}
+		List<UserLocation> getUserLocations = userLocationService.getUserLocationsForADateRange(userId, fromDateT,
+				toDateT);
+		return new ResponseEntity<>(JITPayUserAPIUtil.prepareResponse(userId, getUserLocations), HttpStatus.OK);
+	}
 
-		List<UserLocationRequest> getUserLocations = userLocationService.getUserLocationsForADateRange(userId,
-				fromDateT, toDateT);
-		System.out.println(getUserLocations);
+	@GetMapping("/user_latest_location/{userId}")
+	public @ResponseBody ResponseEntity<Object> getLatestLocationOfTheUser(@PathVariable String userId) {
+		User user = getUser(userId);
+		try {
+			if (Objects.isNull(user))
+				throw new EntityNotFoundException("User does not exist with id: " + userId);
+		} catch (EntityNotFoundException e) {
+			return new JITPayExceptionHandler().handleEntityNotFound(e);
+		}
+		return new ResponseEntity<>(userLocationService.getLatestLocationOfUser(user), HttpStatus.OK);
+	}
 
-		UserLocationResponse userLocationResponse = new UserLocationResponse();
-		userLocationResponse.setUserId(userId);
-		userLocationResponse.setLocations(getUserLocations.stream()
-				.map((userLocation) -> new LocationsResponse(userLocation.getCreatedOn().toString(),
-						userLocation.getLocation()))
-				.collect(Collectors.toList()));
-
-		// System.out.println("From date: " + fromDateT.toString());
-
-		return new ResponseEntity<>(userLocationResponse, HttpStatus.OK);
+	private User getUser(String userId) {
+		if (userService.getUserById(userId).isPresent()) {
+			return userService.getUserById(userId).get();
+		}
+		return null;
 	}
 
 }

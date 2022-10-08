@@ -1,4 +1,4 @@
-package com.jitpay.user.location.vo;
+package com.jitpay.user.location.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
