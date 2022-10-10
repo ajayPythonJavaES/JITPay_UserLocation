@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class JITPayExceptionHandler extends ResponseEntityExceptionHandler{
-	
+public class JITPayExceptionHandler extends ResponseEntityExceptionHandler {
+
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
 		ApiException apiException = new ApiException(HttpStatus.NOT_FOUND);
@@ -23,7 +23,7 @@ public class JITPayExceptionHandler extends ResponseEntityExceptionHandler{
 		apiException.setMessage(ex.getMessage());
 		return buildResponseEntity(apiException);
 	}
-	
+
 	@ExceptionHandler(DateTimeParseException.class)
 	public ResponseEntity<Object> handleParseException(DateTimeParseException ex) {
 		ApiException apiException = new ApiException(HttpStatus.BAD_REQUEST);
@@ -31,9 +31,9 @@ public class JITPayExceptionHandler extends ResponseEntityExceptionHandler{
 		apiException.setMessage(ex.getMessage() + ". Please check the date format specified in the request");
 		return buildResponseEntity(apiException);
 	}
-	
+
 	private ResponseEntity<Object> buildResponseEntity(ApiException apiException) {
-        return new ResponseEntity<>(apiException, apiException.getStatus());
-    }
-	
+		return new ResponseEntity<>(apiException, apiException.getStatus());
+	}
+
 }

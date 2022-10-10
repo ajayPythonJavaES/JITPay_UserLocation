@@ -14,8 +14,8 @@ public class JITPayUserAPIUtil {
 
 	public static LocalDateTime convertStringToLocalDateTime(String dateTime) throws DateTimeParseException{
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-		LocalDateTime fromDateT = LocalDateTime.parse(dateTime, formatter);
-		return fromDateT;
+		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, formatter);
+		return parsedDateTime;
 	}
 	
 	public static UserLocationResponse prepareResponse(String userId, List<UserLocation> userLocations) {

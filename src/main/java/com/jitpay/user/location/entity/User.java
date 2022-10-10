@@ -24,6 +24,18 @@ public class User {
 	@Column
 	private String secondName;
 
+	public User() {
+		
+	}
+	
+	public User(String userId, String firstName, String secondName, String email, String createdOn) {
+		this.userId = userId;
+		this.firstName = firstName;
+		this.secondName = secondName;
+		this.createdOn = createdOn;
+		this.email = email;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}

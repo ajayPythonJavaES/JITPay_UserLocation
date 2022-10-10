@@ -34,7 +34,7 @@ public class UserLocationController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/save_user_location")
+	@PostMapping("/user/location")
 	public @ResponseBody ResponseEntity<Object> saveUserLocation(@RequestBody UserLocation userLocation) {
 		if (Objects.nonNull(userLocation)) {
 			try {
@@ -50,7 +50,7 @@ public class UserLocationController {
 				HttpStatus.OK);
 	}
 
-	@GetMapping("/get_user_locations_for_date_range/{userId}")
+	@GetMapping("/user/location/{userId}")
 	public @ResponseBody ResponseEntity<Object> getUserLocationsWithinDateRange(@PathVariable String userId,
 			@RequestParam(name = "from") String fromDateTime, @RequestParam(name = "to") String toDateTime) {
 
@@ -70,7 +70,7 @@ public class UserLocationController {
 		return new ResponseEntity<>(JITPayUserAPIUtil.prepareResponse(userId, getUserLocations), HttpStatus.OK);
 	}
 
-	@GetMapping("/user_latest_location/{userId}")
+	@GetMapping("/user/latest/location/{userId}")
 	public @ResponseBody ResponseEntity<Object> getLatestLocationOfTheUser(@PathVariable String userId) {
 		User user = getUser(userId);
 		try {

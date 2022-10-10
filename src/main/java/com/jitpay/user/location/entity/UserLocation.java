@@ -35,6 +35,14 @@ public class UserLocation {
 	@OneToOne(targetEntity = Location.class, cascade = CascadeType.ALL)
 	private Location location;
 
+	public UserLocation(int userLocationId, String userId, LocalDateTime createdOn, Location location) {
+		this.userLocationId = userLocationId;
+		this.userId = userId;
+		this.createdOn = createdOn;
+		this.location = location;
+	}
+	
+	
 	public int getUserLocationId() {
 		return userLocationId;
 	}

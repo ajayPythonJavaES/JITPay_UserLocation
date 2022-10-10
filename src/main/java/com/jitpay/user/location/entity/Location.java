@@ -24,6 +24,12 @@ public class Location {
 	@Column
 	private double longitude;
 
+	public Location(int locationId, double latitude, double longitude) {
+		this.locationId = locationId;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+	
 	public int getLocationId() {
 		return locationId;
 	}

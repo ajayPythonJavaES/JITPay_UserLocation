@@ -18,23 +18,27 @@ import com.jitpay.user.location.entity.User;
 import com.jitpay.user.location.exception.JITPayExceptionHandler;
 import com.jitpay.user.location.service.UserService;
 
+/**
+ * @author Ajay Sarvasiddhi
+ * This is a  rest controller to manage the user activities, like, save or update a user and getting the user details with the help of user id. *
+ */
 @RestController
 public class UserController {
 
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/save_update_user")
+	@PostMapping("/user")
 	public @ResponseBody ResponseEntity<String> saveOrUpdateUser(@RequestBody User user) {
 		try {
-			userService.saveOrUpdateUser(user);
+			userService.saveOrUpdateUser(user);		//Service call to perform the transaction
 		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("User created, userId: " + user.getUserId(), HttpStatus.ACCEPTED);
 	}
 
-	@GetMapping("/user_details/{userId}")
+	@GetMapping("/user/{userId}")
 	public @ResponseBody ResponseEntity<Object> getUserDetailsByUserId(@PathVariable String userId) {
 		Optional<User> user = Optional.ofNullable(getUser(userId));
 		try {
