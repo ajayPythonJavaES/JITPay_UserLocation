@@ -1,0 +1,9 @@
+com.jitpay.user.location
+com.jitpay.user.location.controller
+com.jitpay.user.location.entity
+com.jitpay.user.location.exception
+com.jitpay.user.location.model.request
+com.jitpay.user.location.model.response
+com.jitpay.user.location.repository
+com.jitpay.user.location.service
+com.jitpay.user.location.util
