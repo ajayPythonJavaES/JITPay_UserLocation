@@ -1,5 +1,5 @@
 # JITPay_UserAPI
-Tech-stack used: Java 11, Spring Boot 2.6.7, JPA 2.x, H2-Database.
+Tech-stack used: Java 11, Spring Boot 2.6.7, JPA 2.x, H2-Database and POSTMAN(for testing the APIs').
 Built-tool used: Maven
 
 Following are the end points for various APIs: 
